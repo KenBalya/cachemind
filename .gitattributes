@@ -1,0 +1,30 @@
+# Automatic text/binary detection
+* text=auto
+
+# Source code
+*.py text eol=lf
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.h text eol=lf
+*.cmake text eol=lf
+
+CMakeLists.txt text eol=lf
+
+# Configuration
+*.toml text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Documentation
+*.md text eol=lf
+
+# Binary datasets
+*.bin binary
+*.gz binary
+*.zst binary
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary

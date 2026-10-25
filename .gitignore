@@ -1,0 +1,74 @@
+# --------------------------------------------------
+# Python
+# --------------------------------------------------
+
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# --------------------------------------------------
+# Testing and linting
+# --------------------------------------------------
+
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --------------------------------------------------
+# C++ and CMake
+# --------------------------------------------------
+
+build/
+dist/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+
+*.exe
+*.dll
+*.o
+*.obj
+*.a
+*.lib
+*.pdb
+
+# --------------------------------------------------
+# Environment and secrets
+# --------------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+# --------------------------------------------------
+# CacheMind datasets
+# --------------------------------------------------
+
+data/raw/*
+!data/raw/.gitkeep
+
+data/processed/*
+!data/processed/.gitkeep
+
+data/synthetic/*
+!data/synthetic/.gitkeep
+
+# --------------------------------------------------
+# Generated experiment artifacts
+# --------------------------------------------------
+
+results/*
+!results/.gitkeep
+
+# --------------------------------------------------
+# IDE and OS
+# --------------------------------------------------
+
+.vscode/
+.idea/
+
+Thumbs.db
+Desktop.ini
+.DS_Store
