@@ -7,7 +7,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = []
 
 [project.scripts]
-cachemind = "cachemind:main"
+cachemind = "cachemind.cli:main"
 
 [build-system]
 requires = ["hatchling"]

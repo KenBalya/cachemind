@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from cachemind!")
+"""CacheMind: Autonomous Workload-Aware Cache Policy Optimizer."""
