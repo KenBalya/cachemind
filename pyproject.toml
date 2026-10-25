@@ -1,9 +1,9 @@
 [project]
 name = "cachemind"
 version = "0.1.0"
-description = "Add your description here"
+description = "Autonomous Workload-Aware Cache Policy Optimizer"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = []
 
 [project.scripts]
@@ -12,3 +12,9 @@ cachemind = "cachemind:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8,<10",
+    "ruff>=0.9,<1",
+]
