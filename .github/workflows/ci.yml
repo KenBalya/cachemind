@@ -1,0 +1,118 @@
+name: CacheMind CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  # --------------------------------------------------
+  # Python control plane
+  # --------------------------------------------------
+
+  python:
+    name: Python Quality
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+        with:
+          version: "0.11.6"
+          enable-cache: true
+
+      - name: Install Python
+        run: uv python install 3.12
+
+      - name: Synchronize environment
+        run: uv sync --locked --python 3.12 --managed-python
+
+      - name: Verify Python version
+        run: uv run --locked python --version
+
+      - name: Ruff lint
+        run: uv run --locked ruff check .
+
+      - name: Ruff format
+        run: uv run --locked ruff format --check .
+
+      - name: Python tests
+        run: uv run --locked pytest -v
+
+      - name: CLI smoke
+        run: |
+          uv run --locked cachemind --help
+          uv run --locked cachemind --version
+
+  # --------------------------------------------------
+  # C++20 execution plane
+  # --------------------------------------------------
+
+  native:
+    name: Native C++ Quality
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup MSYS2 UCRT64
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-ninja
+
+      - name: Verify native toolchain
+        shell: msys2 {0}
+        run: |
+          set -euo pipefail
+          g++ --version
+          cmake --version
+          ninja --version
+
+      - name: Configure CMake
+        shell: msys2 {0}
+        run: |
+          set -euo pipefail
+
+          GCC_PATH="$(cygpath -m "$(command -v g++)")"
+          NINJA_PATH="$(cygpath -m "$(command -v ninja)")"
+
+          cmake \
+            -S native \
+            -B build/native \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_TESTING=ON \
+            "-DCMAKE_CXX_COMPILER=$GCC_PATH" \
+            "-DCMAKE_MAKE_PROGRAM=$NINJA_PATH"
+
+      - name: Build native executable
+        shell: msys2 {0}
+        run: |
+          set -euo pipefail
+          cmake --build build/native --verbose
+
+      - name: Run native tests
+        shell: msys2 {0}
+        run: |
+          set -euo pipefail
+          ctest --test-dir build/native --output-on-failure

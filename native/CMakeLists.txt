@@ -6,18 +6,18 @@ project(
     LANGUAGES CXX
 )
 
-# ------------------------------------------
-# Native C++20 smoke executable
-# ------------------------------------------
+# --------------------------------------------------
+# C++20 executable
+# --------------------------------------------------
 
 add_executable(
     cachemind-native-smoke
     src/smoke.cpp
 )
 
-# ------------------------------------------
-# C++ standard configuration
-# ------------------------------------------
+# --------------------------------------------------
+# Language standard
+# --------------------------------------------------
 
 set_target_properties(
     cachemind-native-smoke
@@ -27,9 +27,9 @@ set_target_properties(
     CXX_EXTENSIONS OFF
 )
 
-# ------------------------------------------
-# GCC compiler diagnostics
-# ------------------------------------------
+# --------------------------------------------------
+# Compiler diagnostics
+# --------------------------------------------------
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(
@@ -38,5 +38,18 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         -Wall
         -Wextra
         -Wpedantic
+    )
+endif()
+
+# --------------------------------------------------
+# Automated testing
+# --------------------------------------------------
+
+include(CTest)
+
+if(BUILD_TESTING)
+    add_test(
+        NAME native_smoke
+        COMMAND $<TARGET_FILE:cachemind-native-smoke>
     )
 endif()

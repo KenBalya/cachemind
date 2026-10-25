@@ -7,11 +7,9 @@ import platform
 import shutil
 import subprocess
 import sys
-
 from collections.abc import Sequence
 from importlib.metadata import version
 from pathlib import Path
-
 
 REQUIRED_TOOLS = {
     "uv": "uv",
@@ -56,22 +54,13 @@ def check_compiler(compiler_path: str) -> bool:
     print(f"GCC target: {target}")
 
     if target != EXPECTED_GCC_TARGET:
-        print(
-            "[FAIL] Expected Windows x64 GCC target: "
-            f"{EXPECTED_GCC_TARGET}"
-        )
+        print(f"[FAIL] Expected Windows x64 GCC target: {EXPECTED_GCC_TARGET}")
         return False
 
-    compiler_parts = {
-        part.lower()
-        for part in Path(compiler_path).parts
-    }
+    compiler_parts = {part.lower() for part in Path(compiler_path).parts}
 
     if "ucrt64" not in compiler_parts:
-        print(
-            "[FAIL] GCC must come from the "
-            "MSYS2 UCRT64 toolchain."
-        )
+        print("[FAIL] GCC must come from the MSYS2 UCRT64 toolchain.")
         return False
 
     return True
@@ -189,9 +178,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         prog="cachemind",
-        description=(
-            "Autonomous Workload-Aware Cache Policy Optimizer"
-        ),
+        description=("Autonomous Workload-Aware Cache Policy Optimizer"),
     )
 
     parser.add_argument(
